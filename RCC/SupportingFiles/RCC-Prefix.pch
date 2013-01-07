@@ -1,0 +1,52 @@
+//
+// Prefix header for all source files of the 'RCC' target in the 'RCC' project
+//
+
+#import <Availability.h>
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#endif
+
+// NOTES:
+// This turns off NSAssertions in release builds!
+
+// THESE MACROS ARE BEEING ADDED HERE:
+// DLog: DEBUG mode only NSLog statement
+// Example: DLog(@"It failed. Value1: %i Value2: %i", value1, value2);
+
+// ALog:
+// DEBUG flag set: throws NSAssertion
+// DEBUG flag not set: converts to NSLog statement, throws no NSAssertion
+// Example: ALog(@"It failed. Value1: %i Value2: %i", value1, value2);
+
+// ZAssert:
+// DEBUG flag does not matter. Always the same behaviour.
+// Condition check:
+// Check evaluates to YES: nothing happens
+// Check evaluates to NO: performs NSLog statement in DEBUG + RELEASE mode.
+// Example:
+// NSError *error = nil;
+// ZAssert([managedObjectContext save:&error], @"My save failed: %@\n%@", [error localizedDescription], [error userInfo]);
+
+#ifdef DEBUG
+#define DLog(args...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:args])
+#define ALog(args...) [[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithCString:__PRETTY_FUNCTION__ encoding:NSUTF8StringEncoding] file:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] lineNumber:__LINE__ description:args]
+#else
+#define DLog(x...)
+#ifndef NS_BLOCK_ASSERTIONS
+#define NS_BLOCK_ASSERTIONS
+#endif
+#define ALog(args...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:args])
+#endif
+
+#define ZAssert(condition, args...) do { if (!(condition)) { ALog(args); }} while(0)
+
+/* END OF PREFIX ADDITIONS */
